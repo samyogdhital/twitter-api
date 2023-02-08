@@ -5,6 +5,8 @@ import "../styles/globals.css";
 import "../styles/min.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
+  /**@todo: fix import types **/
+
   React.useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
   }, []);
