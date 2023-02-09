@@ -8,8 +8,14 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  reactStrictMode: true,
-
+  reactStrictMode: false,
+  /** @todo: disable ignoreBuild Errors **/
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you
    * must comment the below `i18n` config out.

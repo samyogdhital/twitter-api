@@ -1,14 +1,39 @@
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 import axios from "axios";
-type ResponseType = {
-  /** @todo: valid response type */
-  data: object;
-};
+import { useFormik } from "formik";
+import React from "react";
+
+// type ResponseType = {
+//   /** @todo: valid response type */
+//   data: object;
+// };
 
 const Home = () => {
-  const { data } = useQuery("key", () =>
-    axios.get<ResponseType>("/api").then((res) => res.data)
-  );
+  // const { data } = useQuery(
+  //   "key",
+  //   () => axios.get<ResponseType>("/api").then((res) => res.data),
+  //   {
+  //     refetchOnMount: false,
+  //     refetchOnWindowFocus: false,
+  //   }
+  // );
+
+  const intialValues = {
+    query: "",
+  };
+
+  const [apiData, setApiData] = React.useState<object>({});
+
+  const onSubmit = async (values: typeof intialValues) => {
+    const data = await axios
+      .post<{ data: object }>("/api", values)
+      .then((res) => res.data);
+    setApiData(data);
+  };
+  const { handleSubmit, handleChange, values } = useFormik<{ query: string }>({
+    initialValues: intialValues,
+    onSubmit,
+  });
 
   return (
     <>
@@ -71,12 +96,15 @@ const Home = () => {
                 </a>
               </li>
             </ul>
-            <form className="d-flex" onSubmit={(e) => e.preventDefault()}>
+            <form className="d-flex" onSubmit={handleSubmit}>
               <input
                 className="form-control me-2"
-                type="search"
+                type="text"
+                name="query"
                 placeholder="Search"
                 aria-label="Search"
+                value={values.query}
+                onChange={handleChange}
               />
               <button className="btn btn-outline-success" type="submit">
                 Search
@@ -85,7 +113,7 @@ const Home = () => {
           </div>
         </div>
       </nav>
-      <main>{data?.name}</main>
+      <main>{apiData?.name}</main>
     </>
   );
 };
